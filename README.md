@@ -4,7 +4,7 @@
 ---
 
 ## 📺 Demo Video
-> 🎬 [Watch the full pipeline demo on YouTube](YOUR_YOUTUBE_LINK_HERE)
+> 🎬 [Watch the full pipeline demo on YouTube](https://youtu.be/k9bh0fMdX_Y)
 
 ---
 
