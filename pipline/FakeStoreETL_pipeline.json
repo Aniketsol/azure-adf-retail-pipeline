@@ -1,0 +1,158 @@
+{
+    "name": "FakeStore_pipeline",
+    "properties": {
+        "activities": [
+            {
+                "name": "Copy data1",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "JsonSource",
+                        "storeSettings": {
+                            "type": "HttpReadSettings",
+                            "requestMethod": "GET"
+                        },
+                        "formatSettings": {
+                            "type": "JsonReadSettings"
+                        }
+                    },
+                    "sink": {
+                        "type": "JsonSink",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageWriteSettings",
+                            "copyBehavior": "FlattenHierarchy"
+                        },
+                        "formatSettings": {
+                            "type": "JsonWriteSettings"
+                        }
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "mappings": [
+                            {
+                                "source": {
+                                    "path": "$['id']"
+                                },
+                                "sink": {
+                                    "path": "$['id']"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['title']"
+                                },
+                                "sink": {
+                                    "path": "$['title']"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['price']"
+                                },
+                                "sink": {
+                                    "path": "$['price']"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['description']"
+                                },
+                                "sink": {
+                                    "path": "$['description']"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['category']"
+                                },
+                                "sink": {
+                                    "path": "$['category']"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['image']"
+                                },
+                                "sink": {
+                                    "path": "$['image']"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['rating']['rate']"
+                                },
+                                "sink": {
+                                    "path": "$['rating']['rate']"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['rating']['count']"
+                                },
+                                "sink": {
+                                    "path": "$['rating']['count']"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "FakeStoreApi_ds",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "BlobStorage_DS",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "Data flow1",
+                "type": "ExecuteDataFlow",
+                "dependsOn": [
+                    {
+                        "activity": "Copy data1",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "dataflow": {
+                        "referenceName": "CleanProductFLow",
+                        "type": "DataFlowReference"
+                    },
+                    "compute": {
+                        "coreCount": 8,
+                        "computeType": "General"
+                    },
+                    "traceLevel": "Fine"
+                }
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2026-03-12T09:19:37Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
